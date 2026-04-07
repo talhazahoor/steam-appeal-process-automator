@@ -1,2 +1,5 @@
 # steam-appeal-process-automator
-Automate Steam Ban Appeals
+
+This repository was created by [Inceptzon](https://inceptzon.com).
+
+See `ARCHITECTURE.md` for the full technical architecture document.
