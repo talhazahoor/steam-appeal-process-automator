@@ -1,10 +1,10 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://api.steampowered.com',
+  baseURL: 'https://api.steam.com/',
 });
 
-export const submitAppeal = async (appealReason: string) => {
-  console.log('Submitting appeal to Steam API:', appealReason);
-  // TODO: Call Steam API to submit appeal
+export const getBanReason = async () => {
+  const response = await api.get('ISteamUser/GetBanReason/v1/');
+  return response.data;
 };
