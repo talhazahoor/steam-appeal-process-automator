@@ -4,11 +4,14 @@ The Steam Appeal Process Automator is a web application designed to automate the
 ## Prerequisites
 * Node.js
 * MongoDB
-* Steam API key
+* Redis
 ## Installation
-* Run `npm install` to install dependencies
+npm install
 ## Environment setup
-* Create a `.env` file with the required environment variables
+Create a .env file and add the required environment variables.
 ## Run commands
-* Run `npm run dev` for development mode
-* Run `npm run build` and `npm run start` for production mode
+### Development
+npm run dev
+### Production
+npm run build
+npm run start

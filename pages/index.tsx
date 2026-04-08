@@ -1,38 +1,32 @@
+import type { NextPage } from 'next';
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import Head from 'next/head';
+import { trpc } from '../utils/trpc';
 
-const appealSchema = z.object({
-  appealReason: z.string().min(1, 'Please enter a reason for your appeal'),
-});
+const Home: NextPage = () => {
+  const [steamId, setSteamId] = useState('');
+  const [banReason, setBanReason] = useState('');
+  const { data, isLoading } = trpc.useQuery(['appeal.getAppealStatus', { steamId }]);
 
-type AppealForm = z.infer<typeof appealSchema>;
-
-export default function Home() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm<AppealForm>({ resolver: zodResolver(appealSchema) });
-
-  const onSubmit = async (data: AppealForm) => {
-    setIsSubmitting(true);
-    console.log('Submitting appeal:', data);
-    // TODO: Call API to submit appeal
-    setIsSubmitting(false);
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('Submit appeal');
   };
 
   return (
     <div>
-      <Head>
-        <title>Steam Appeal Process Automator</title>
-      </Head>
       <h1>Steam Appeal Process Automator</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <label>Appeal Reason:</label>
-        <textarea {...register('appealReason')} />
-        {errors.appealReason && <p>{errors.appealReason.message}</p>}
-        <button type='submit' disabled={isSubmitting}>{isSubmitting ? 'Submitting...' : 'Submit Appeal'}</button>
+      <form onSubmit={handleSubmit}>
+        <input type="text" value={steamId} onChange={(event) => setSteamId(event.target.value)} placeholder="Steam ID"/>
+        <input type="text" value={banReason} onChange={(event) => setBanReason(event.target.value)} placeholder="Ban Reason"/>
+        <button type="submit">Submit Appeal</button>
       </form>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <p>Appeal Status: {data?.status}</p>
+      )}
     </div>
   );
-}
+};
+
+export default Home;
